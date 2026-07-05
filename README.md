@@ -6,7 +6,7 @@ A basic TypeScript CLI template scaffolded with [Commander](https://github.com/t
 ## Getting started
 
 ```bash
-npm install
+npm ci
 ```
 
 ## Usage
