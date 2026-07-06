@@ -38,35 +38,35 @@ Detailed plan (full TDD steps + code): `docs/superpowers/plans/2026-07-06-ai-com
 
 Goal: a Next.js website where the user describes an AI component (skill, agent, prompt, MCP server) and gets a unified, de-duplicated, ranked list of links from GitHub, Smithery, SkillsMP, and a Google Custom Search fallback.
 
-### [ ] Step 1: Convert CLI scaffold to a Next.js app
+### [x] Step 1: Convert CLI scaffold to a Next.js app
 - Remove CLI sample files; install Next/React; wire package.json scripts, tsconfig, next.config, layout/page shell, `.env.example`, `.gitignore`, vitest config
 
-### [ ] Step 2: Shared adapter types and config module
+### [x] Step 2: Shared adapter types and config module
 - `src/lib/adapters/types.ts` (ComponentType, AdapterId, SearchResult, SearchAdapter) and `src/lib/config.ts` (getConfig) with tests
 
-### [ ] Step 3: Dedupe and rank utilities
+### [x] Step 3: Dedupe and rank utilities
 - `src/lib/search/dedupe.ts` (canonical-URL de-dup) and `rank.ts` (source weight + stars) with tests
 
-### [ ] Step 4: GitHub adapter
+### [x] Step 4: GitHub adapter
 - `src/lib/adapters/github.ts` (repo search, always enabled) with tests
 
-### [ ] Step 5: SkillsMP adapter
+### [x] Step 5: SkillsMP adapter
 - `src/lib/adapters/skillsmp.ts` (skills search, always enabled) with tests
 
-### [ ] Step 6: Smithery adapter
+### [x] Step 6: Smithery adapter
 - `src/lib/adapters/smithery.ts` (MCP/agent registry, self-disables without key) with tests
 
-### [ ] Step 7: Google Custom Search adapter
+### [x] Step 7: Google Custom Search adapter
 - `src/lib/adapters/google.ts` (fallback, self-disables without key + cx) with tests
 
-### [ ] Step 8: Adapter registry and routing
+### [x] Step 8: Adapter registry and routing
 - `src/lib/adapters/index.ts` (createAdapters, selectAdapters by component type) with tests
 
-### [ ] Step 9: Search orchestrator
+### [x] Step 9: Search orchestrator
 - `src/lib/search/orchestrator.ts` (parallel adapters, timeouts, dedupe+rank, per-source status) with tests
 
-### [ ] Step 10: `/api/search` route handler
+### [x] Step 10: `/api/search` route handler
 - `src/app/api/search/route.ts` (Zod validation, orchestration) with tests
 
-### [ ] Step 11: Search UI
+### [x] Step 11: Search UI
 - `SearchForm`, `SourceFilter`, `ResultCard`, `ResultsList`, `page.tsx`, `globals.css` — unified list with source-filter chips and per-source status
