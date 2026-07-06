@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { dedupe } from './dedupe.js';
-import type { SearchResult } from '../adapters/types.js';
+﻿import { describe, expect, it } from 'vitest';
+import { dedupe } from './dedupe';
+import type { SearchResult } from '../adapters/types';
 
 const r = (over: Partial<SearchResult>): SearchResult => ({
   title: 't', url: 'https://x', source: 'github', ...over,

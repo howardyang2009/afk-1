@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
-import { createGithubAdapter } from './github.js';
+﻿import { describe, expect, it, vi } from 'vitest';
+import { createGithubAdapter } from './github';
 
 function mockFetch(payload: unknown, ok = true, status = 200) {
   return vi.fn(async () => ({

@@ -1,4 +1,4 @@
-import type { AdapterId, SearchResult } from '../adapters/types.js';
+﻿import type { AdapterId, SearchResult } from '../adapters/types';
 
 const SOURCE_WEIGHT: Record<AdapterId, number> = {
   skillsmp: 3,

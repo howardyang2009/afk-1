@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { POST } from './route.js';
+﻿import { describe, expect, it } from 'vitest';
+import { POST } from './route';
 
 function post(body: unknown): Request {
   return new Request('http://localhost/api/search', {

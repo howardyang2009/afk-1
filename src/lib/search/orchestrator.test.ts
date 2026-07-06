@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { runSearch } from './orchestrator.js';
-import type { SearchAdapter, SearchResult } from '../adapters/types.js';
+﻿import { describe, expect, it } from 'vitest';
+import { runSearch } from './orchestrator';
+import type { SearchAdapter, SearchResult } from '../adapters/types';
 
 function fakeAdapter(over: Partial<SearchAdapter> & { id: SearchAdapter['id'] }): SearchAdapter {
   return {

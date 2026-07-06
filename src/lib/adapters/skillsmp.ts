@@ -1,4 +1,4 @@
-import type { ComponentType, FetchLike, SearchAdapter, SearchResult } from './types.js';
+﻿import type { ComponentType, FetchLike, SearchAdapter, SearchResult } from './types';
 
 interface SkillsmpSkill {
   name: string;

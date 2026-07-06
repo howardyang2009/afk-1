@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { rank } from './rank.js';
-import type { SearchResult } from '../adapters/types.js';
+﻿import { describe, expect, it } from 'vitest';
+import { rank } from './rank';
+import type { SearchResult } from '../adapters/types';
 
 const r = (over: Partial<SearchResult>): SearchResult => ({
   title: 't', url: 'https://x', source: 'github', ...over,

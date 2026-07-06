@@ -1,9 +1,9 @@
-import type { AppConfig } from '../config.js';
-import { createGithubAdapter } from './github.js';
-import { createGoogleAdapter } from './google.js';
-import { createSkillsmpAdapter } from './skillsmp.js';
-import { createSmitheryAdapter } from './smithery.js';
-import type { ComponentType, FetchLike, SearchAdapter } from './types.js';
+﻿import type { AppConfig } from '../config';
+import { createGithubAdapter } from './github';
+import { createGoogleAdapter } from './google';
+import { createSkillsmpAdapter } from './skillsmp';
+import { createSmitheryAdapter } from './smithery';
+import type { ComponentType, FetchLike, SearchAdapter } from './types';
 
 export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAdapter[] {
   return [

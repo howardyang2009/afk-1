@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { getConfig } from './config.js';
+﻿import { afterEach, describe, expect, it } from 'vitest';
+import { getConfig } from './config';
 
 describe('getConfig', () => {
   const saved = { ...process.env };

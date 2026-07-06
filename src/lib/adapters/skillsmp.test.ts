@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
-import { createSkillsmpAdapter } from './skillsmp.js';
+﻿import { describe, expect, it, vi } from 'vitest';
+import { createSkillsmpAdapter } from './skillsmp';
 
 function mockFetch(payload: unknown, ok = true, status = 200) {
   return vi.fn(async () => ({ ok, status, json: async () => payload })) as unknown as typeof fetch;

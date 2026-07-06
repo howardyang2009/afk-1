@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { createAdapters, selectAdapters } from './index.js';
+﻿import { describe, expect, it } from 'vitest';
+import { createAdapters, selectAdapters } from './index';
 
 describe('adapter registry', () => {
   it('creates all four adapters', () => {

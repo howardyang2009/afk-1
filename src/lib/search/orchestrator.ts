@@ -1,11 +1,11 @@
-import type {
+﻿import type {
   AdapterId,
   ComponentType,
   SearchAdapter,
   SearchResult,
-} from '../adapters/types.js';
-import { dedupe } from './dedupe.js';
-import { rank } from './rank.js';
+} from '../adapters/types';
+import { dedupe } from './dedupe';
+import { rank } from './rank';
 
 export interface SourceStatus {
   source: AdapterId;
