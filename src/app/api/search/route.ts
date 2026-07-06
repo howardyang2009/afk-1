@@ -5,7 +5,7 @@ import { runSearch } from '@/lib/search/orchestrator';
 
 const RequestSchema = z.object({
   type: z.enum(['skill', 'agent', 'prompt', 'mcp']),
-  query: z.string().trim().min(1),
+  query: z.string().trim().min(1).max(200),
 });
 
 export async function POST(request: Request): Promise<Response> {

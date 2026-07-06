@@ -37,25 +37,25 @@ export async function runSearch(
 ): Promise<SearchResponse> {
   const timeoutMs = opts.timeoutMs ?? 8000;
   const collected: SearchResult[] = [];
-  const sources: SourceStatus[] = [];
+  const sources: SourceStatus[] = new Array(adapters.length);
 
   await Promise.all(
-    adapters.map(async (adapter) => {
+    adapters.map(async (adapter, i) => {
       if (!adapter.isEnabled()) {
-        sources.push({ source: adapter.id, status: 'disabled', count: 0 });
+        sources[i] = { source: adapter.id, status: 'disabled', count: 0 };
         return;
       }
       try {
         const results = await withTimeout(adapter.search(query, type), timeoutMs);
         collected.push(...results);
-        sources.push({ source: adapter.id, status: 'ok', count: results.length });
+        sources[i] = { source: adapter.id, status: 'ok', count: results.length };
       } catch (err) {
-        sources.push({
+        sources[i] = {
           source: adapter.id,
           status: 'error',
           count: 0,
           message: err instanceof Error ? err.message : 'unknown error',
-        });
+        };
       }
     }),
   );

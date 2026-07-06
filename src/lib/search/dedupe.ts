@@ -16,12 +16,27 @@ function canonicalKey(result: SearchResult): string {
   }
 }
 
+function unionSources(a: SearchResult['sources'], bSource: SearchResult['source'], bSources: SearchResult['sources']): NonNullable<SearchResult['sources']> {
+  const base = a ?? [];
+  const incoming = bSources ?? [bSource];
+  const seen = new Set(base);
+  const out = [...base];
+  for (const s of incoming) {
+    if (!seen.has(s)) {
+      seen.add(s);
+      out.push(s);
+    }
+  }
+  return out;
+}
+
 function merge(a: SearchResult, b: SearchResult): SearchResult {
   return {
     ...a,
     githubUrl: a.githubUrl ?? b.githubUrl,
     description: a.description ?? b.description,
     stars: a.stars ?? b.stars,
+    sources: unionSources(a.sources, b.source, b.sources),
   };
 }
 
@@ -30,7 +45,18 @@ export function dedupe(results: SearchResult[]): SearchResult[] {
   for (const result of results) {
     const key = canonicalKey(result);
     const existing = map.get(key);
-    map.set(key, existing ? merge(existing, result) : result);
+    if (existing) {
+      map.set(key, merge(existing, result));
+    } else {
+      // Initialize sources for first-seen result
+      const sources = result.sources ?? [result.source];
+      const seen = new Set<SearchResult['source']>();
+      const deduped: NonNullable<SearchResult['sources']> = [];
+      for (const s of sources) {
+        if (!seen.has(s)) { seen.add(s); deduped.push(s); }
+      }
+      map.set(key, { ...result, sources: deduped });
+    }
   }
   return [...map.values()];
 }

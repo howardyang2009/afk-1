@@ -7,6 +7,7 @@ export interface SearchResult {
   githubUrl?: string;
   description?: string;
   source: AdapterId;
+  sources?: AdapterId[];
   stars?: number;
 }
 

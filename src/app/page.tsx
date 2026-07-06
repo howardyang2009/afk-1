@@ -33,12 +33,12 @@ export default function Home() {
   }
 
   const sourceIds = useMemo<AdapterId[]>(
-    () => (data ? data.sources.map((s) => s.source) : []),
+    () => (data ? data.sources.filter((s) => s.status === 'ok' && s.count > 0).map((s) => s.source) : []),
     [data],
   );
 
   const visible = useMemo(
-    () => (data ? data.results.filter((r) => active === 'all' || r.source === active) : []),
+    () => (data ? data.results.filter((r) => active === 'all' || (r.sources ?? [r.source]).includes(active)) : []),
     [data, active],
   );
 

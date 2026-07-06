@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi, afterEach } from 'vitest';
 import { POST } from './route';
 
 function post(body: unknown): Request {
@@ -10,6 +10,23 @@ function post(body: unknown): Request {
 }
 
 describe('POST /api/search', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('returns 200 with results and sources arrays on a valid request (stubbed fetch)', async () => {
+    vi.stubGlobal('fetch', async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ items: [], data: { skills: [] } }),
+    }));
+    const res = await POST(post({ type: 'skill', query: 'pdf' }));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(Array.isArray(body.results)).toBe(true);
+    expect(Array.isArray(body.sources)).toBe(true);
+  });
+
   it('rejects a missing query with 400', async () => {
     const res = await POST(post({ type: 'skill' }));
     expect(res.status).toBe(400);

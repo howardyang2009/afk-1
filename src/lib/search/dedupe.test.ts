@@ -39,4 +39,14 @@ describe('dedupe', () => {
     expect(out[0].description).toBe('nice');
     expect(out[0].stars).toBe(5);
   });
+
+  it('populates sources with all contributing adapters when deduping across github and skillsmp', () => {
+    const out = dedupe([
+      r({ url: 'https://github.com/foo/bar', githubUrl: 'https://github.com/foo/bar', source: 'github' }),
+      r({ url: 'https://github.com/foo/bar', githubUrl: 'https://github.com/foo/bar', source: 'skillsmp' }),
+    ]);
+    expect(out).toHaveLength(1);
+    expect(out[0].sources).toContain('github');
+    expect(out[0].sources).toContain('skillsmp');
+  });
 });
