@@ -1,4 +1,4 @@
-﻿import type { FetchLike, SearchAdapter, SearchResult } from './types';
+import type { FetchLike, SearchAdapter, SearchResult } from './types';
 
 interface GithubRepo {
   full_name: string;

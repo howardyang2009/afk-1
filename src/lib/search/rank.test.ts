@@ -1,4 +1,4 @@
-﻿import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { rank } from './rank';
 import type { SearchResult } from '../adapters/types';
 

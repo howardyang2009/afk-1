@@ -1,4 +1,4 @@
-﻿import type { SearchResult } from '../adapters/types';
+import type { SearchResult } from '../adapters/types';
 
 function canonicalKey(result: SearchResult): string {
   const raw = result.githubUrl ?? result.url;

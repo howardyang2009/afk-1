@@ -1,4 +1,4 @@
-﻿import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { dedupe } from './dedupe';
 import type { SearchResult } from '../adapters/types';
 

@@ -1,4 +1,4 @@
-﻿import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { runSearch } from './orchestrator';
 import type { SearchAdapter, SearchResult } from '../adapters/types';
 

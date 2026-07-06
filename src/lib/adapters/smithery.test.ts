@@ -1,4 +1,4 @@
-﻿import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createSmitheryAdapter } from './smithery';
 
 function mockFetch(payload: unknown, ok = true, status = 200) {

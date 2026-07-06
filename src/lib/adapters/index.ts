@@ -1,4 +1,4 @@
-﻿import type { AppConfig } from '../config';
+import type { AppConfig } from '../config';
 import { createGithubAdapter } from './github';
 import { createGoogleAdapter } from './google';
 import { createSkillsmpAdapter } from './skillsmp';

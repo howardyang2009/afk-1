@@ -1,16 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { AdapterId, ComponentType, SearchResult } from '@/lib/adapters/types';
-import type { SourceStatus } from '@/lib/search/orchestrator';
+import type { AdapterId, ComponentType, SearchResult, SourceStatus, SearchResponse } from '@/lib/types';
 import { SearchForm } from '@/components/SearchForm';
 import { SourceFilter } from '@/components/SourceFilter';
 import { ResultsList } from '@/components/ResultsList';
-
-interface SearchResponse {
-  results: SearchResult[];
-  sources: SourceStatus[];
-}
 
 export default function Home() {
   const [loading, setLoading] = useState(false);

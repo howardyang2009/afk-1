@@ -1,5 +1,5 @@
 import type { SearchResult } from '@/lib/adapters/types';
-import { ResultCard } from './ResultCard';
+import { ResultCard } from '@/components/ResultCard';
 
 export function ResultsList({ results }: { results: SearchResult[] }) {
   if (results.length === 0) return <p className="status">No results.</p>;

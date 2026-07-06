@@ -1,4 +1,4 @@
-﻿import type { ComponentType, FetchLike, SearchAdapter, SearchResult } from './types';
+import type { ComponentType, FetchLike, SearchAdapter, SearchResult } from './types';
 
 interface SmitheryServer {
   qualifiedName: string;
