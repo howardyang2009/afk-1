@@ -18,6 +18,11 @@ describe('adapter registry', () => {
     expect(ids).toEqual(['github', 'google', 'smithery']);
   });
 
+  it('routes agent to smithery + github + google', () => {
+    const ids = selectAdapters(createAdapters({}), 'agent').map((a) => a.id).sort();
+    expect(ids).toEqual(['github', 'google', 'smithery']);
+  });
+
   it('routes prompt to github + google only', () => {
     const ids = selectAdapters(createAdapters({}), 'prompt').map((a) => a.id).sort();
     expect(ids).toEqual(['github', 'google']);
