@@ -11,10 +11,11 @@ describe('createSmitheryAdapter', () => {
     expect(createSmitheryAdapter({ apiKey: 'k' }).isEnabled()).toBe(true);
   });
 
-  it('supports mcp and agent only', () => {
+  it('supports mcp and skill only', () => {
     const adapter = createSmitheryAdapter({ apiKey: 'k' });
     expect(adapter.supports('mcp')).toBe(true);
-    expect(adapter.supports('agent')).toBe(true);
+    expect(adapter.supports('skill')).toBe(true);
+    expect(adapter.supports('agent')).toBe(false);
     expect(adapter.supports('prompt')).toBe(false);
   });
 
