@@ -1,0 +1,50 @@
+
+--- Run started: 2026-07-07T15:31:47.195Z ---
+Iteration 1/1
+Setting up sandbox
+Setting up sandbox done (0.2s)
+Expanding shell expressions
+  git diff main...sandcastle/issue-3 → ~2372 tokens
+  git log main..sandcastle/issue-3 --oneline → ~14 tokens
+Expanding shell expressions done (0.1s)
+Agent started
+The Brave adapter is well-structured and mirrors the Google adapter cleanly. The most notable issue: `githubUrlOf` is now duplicated verbatim between `google.ts` and `brave.ts`. Let me check the other adapters to see if there's a shared home for it.
+Bash(ls /home/agent/workspace/src/lib/adapters/ && echo "---" && grep -rn "githubUrlOf\|www\\\\." /home/agent/workspace/src/lib/adapters/)
+The Brave adapter is clean and consistent with the existing Google adapter. The one real maintainability issue introduced by this branch is that `githubUrlOf` is now duplicated verbatim in `google.ts` and `brave.ts`. Let me extract it into a shared helper.Now update `brave.ts` and `google.ts` to use the shared helper:Now run type checking and tests:
+Bash(cat package.json | grep -A20 scripts)
+Bash(npm run typecheck && npx vitest run src/lib/adapters 2>&1 | tail -30)
+The smithery test failure is pre-existing and unrelated to my change (the smithery adapter was disabled in earlier commits). Let me confirm it fails independently of my edits:
+Bash(git stash && npx vitest run src/lib/adapters/smithery.test.ts 2>&1 | tail -5; git stash pop)
+Confirmed pre-existing and out of scope. My changes (brave, google, github-url) all pass typecheck and their tests. Let me commit.
+Bash(git add src/lib/adapters/github-url.ts src/lib/adapters/brave.ts src/lib/adapters/google.ts && git commit -q -m "refactor: extract shared githubUrlOf helper for search adapters
+
+The Brave adapter duplicated google.ts's githubUrlOf verbatim. Move it to
+a shared github-url module and import it in both adapters to remove the
+duplication.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>" && git log --oneline -1)
+I reviewed the branch and made one targeted refinement.
+
+## Review summary
+
+The Brave adapter (`brave.ts`) is well-written: it closely mirrors the existing Google adapter's structure, uses a proper type-narrowing filter predicate instead of unsafe casts, handles the missing-`web`-block edge case, and has thorough test coverage (enablement, component support, request shape, result mapping, github-link detection, filtering, error propagation). The config, registry, ranking-weight, and type-union additions are all correct and consistent.
+
+## Change made
+
+**Extracted the duplicated `githubUrlOf` helper.** The new `brave.ts` copied `google.ts`'s `githubUrlOf` function verbatim — the same try/catch URL-hostname check appeared in two places. I moved it to a shared `src/lib/adapters/github-url.ts` module and imported it in both adapters. This removes the duplication so the github-detection logic has a single source of truth, with no change in behavior.
+
+## Verification
+
+- `npm run typecheck` passes.
+- All adapter tests pass except a **pre-existing** `smithery.test.ts` failure, which I confirmed (via `git stash`) fails independently of my changes — the Smithery adapter was disabled in earlier commits and is out of scope for this branch.
+
+<promise>COMPLETE</promise>
+Agent stopped
+Capturing session
+Syncing 1 commit to host
+Syncing 1 commit to host done (0.0s)
+Collecting commits
+Collecting commits done (0.0s)
+Agent signaled completion after 1 iteration(s).
+Run complete: agent finished after 1 iteration(s).
+Context window: 35k

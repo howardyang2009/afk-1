@@ -1,0 +1,87 @@
+
+--- Run started: 2026-07-07T15:29:41.734Z ---
+Iteration 1/100
+Setting up sandbox
+Setting up sandbox done (0.3s)
+Expanding shell expressions
+  git log -n 10 --format="%H%n%ad%n%B---" --date=short → ~422 tokens
+Expanding shell expressions done (0.1s)
+Agent started
+Bash(gh issue view 3)
+Bash(git branch --show-current && ls)
+Bash(ls -R src/lib/adapters)
+Bash(grep -rn "AdapterId\|'google'\|\"google\"" src --include=*.ts --include=*.tsx | grep -v test | grep -v adapters/)
+Bash(npx vitest run src/lib/adapters/index.test.ts 2>&1 | tail -25)
+Bash(npx vitest run 2>&1 | tail -20)
+Now I understand the pattern. Note there are pre-existing test failures in `index.test.ts` and `smithery.test.ts` from the earlier smithery removal — unrelated to my task. Let me build the Brave adapter with RGR.
+
+First, RED — write the test:Now GREEN — the implementation:Now wire up the type, config, and registry:The registry test `index.test.ts` directly asserts the adapter list I'm modifying (and was already failing from the smithery removal). I'll update it to reflect current reality including brave:
+Bash(npm run typecheck 2>&1 | tail -20)
+Bash(npx vitest run src/lib/adapters/brave.test.ts src/lib/adapters/index.test.ts 2>&1 | tail -20)
+Typecheck passes and my new/updated tests pass. Let me run the full suite to confirm the overall state:
+Bash(npx vitest run 2>&1 | tail -30)
+Only the pre-existing `smithery.test.ts` failure remains — that predates my work (smithery's `supports('agent')` behavior was changed in a prior commit) and is outside this task's scope. My Brave adapter work is complete. Let me verify the diff and commit:
+Bash(git add -A && git status --short)
+Bash(git commit -q -m "$(cat <<'EOF'
+RALPH: Add Brave Search API adapter (issue #3)
+
+Task: implement the Brave Search web adapter following the SearchAdapter
+interface in src/lib/adapters/types.ts (issue #3, "Sandcastle" label; no parent PRD).
+
+Key decisions:
+- Follows the google adapter shape: general web search, supports() all
+  component types, isEnabled() gated on the API key, github.com links
+  surfaced via githubUrl.
+- Calls https://api.search.brave.com/res/v1/web/search with the
+  X-Subscription-Token header; maps body.web.results, filtering entries
+  missing a title/url.
+- Config key braveKey from BRAVE_SEARCH_API_KEY; registered in
+  createAdapters and weighted (1) in rank.ts SOURCE_WEIGHT.
+- Updated index.test.ts registry expectations to include brave.
+
+Files: src/lib/adapters/brave.ts (+ brave.test.ts), adapters/index.ts,
+adapters/index.test.ts, adapters/types.ts, lib/config.ts, search/rank.ts.
+
+Notes for next iteration: pre-existing failure in smithery.test.ts
+(supports('agent')) is unrelated to this task, left untouched. typecheck
+clean; brave + registry tests green.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+EOF
+)")
+Bash(git log --oneline -1)
+The task is complete. Summary of what I did for issue #3 (Add Brave Search API adapter):
+
+**Implementation** (`src/lib/adapters/brave.ts`)
+- Implements the `SearchAdapter` interface from `types.ts`, modeled on the existing `google` adapter.
+- Calls `https://api.search.brave.com/res/v1/web/search` with the `X-Subscription-Token` header.
+- `supports()` returns true for all component types; `isEnabled()` is gated on the API key.
+- Maps `body.web.results`, filters entries missing a title/url, and surfaces `github.com` links via `githubUrl`.
+
+**Wiring**
+- Added `'brave'` to the `AdapterId` union (`types.ts`).
+- Added `braveKey` from `BRAVE_SEARCH_API_KEY` (`config.ts`).
+- Registered `createBraveAdapter` in `createAdapters` (`index.ts`).
+- Added weight for `brave` in `SOURCE_WEIGHT` (`rank.ts`).
+
+**Tests**
+- New `brave.test.ts` (7 cases, RGR): enablement, type support, request headers/query, result mapping + github marking, filtering, empty body, error handling.
+- Updated `index.test.ts` registry expectations to include brave.
+
+**Verification**
+- `npm run typecheck`: clean.
+- Brave + registry tests: 12 passing.
+- Full suite: only a pre-existing `smithery.test.ts` failure remains (from the earlier smithery removal, unrelated to this task — left untouched).
+
+Committed as `288b872` on `sandcastle/issue-3`. Issue left open per instructions.
+
+<promise>COMPLETE</promise>
+Agent stopped
+Capturing session
+Syncing 1 commit to host
+Syncing 1 commit to host done (0.0s)
+Collecting commits
+Collecting commits done (0.0s)
+Agent signaled completion after 1 iteration(s).
+Run complete: agent finished after 1 iteration(s).
+Context window: 40k

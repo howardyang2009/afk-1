@@ -1,0 +1,72 @@
+
+--- Run started: 2026-07-07T15:32:56.139Z ---
+Sandcastle Run
+  Agent: merger
+  Sandbox: docker
+  Max iterations: 1
+  Branch: main
+Iteration 1/1
+Setting up sandbox
+  npm install
+Setting up sandbox done (1.8s)
+Agent started
+I'll start by examining the current state and the branch to merge.
+Bash(git status && echo "---BRANCHES---" && git branch -a && echo "---LOG issue-3---" && git log --oneline main..sandcastle/issue-3 2>/dev/null || git log --oneline main..origin/sandcastle/issue-3 2>/dev/null)
+Bash(git diff --stat main..sandcastle/issue-3 && echo "---" && cat package.json | grep -A20 scripts)
+Now let me merge the branch.
+Bash(git merge sandcastle/issue-3 --no-edit)
+Fast-forward merge, no conflicts. Now let me verify with typecheck and tests.
+Bash(npm run typecheck 2>&1 | tail -20)
+Bash(npm run test 2>&1 | tail -30)
+There's a test failure in `smithery.test.ts`. Let me investigate whether it's pre-existing or caused by the merge.
+Bash(git stash -u 2>/dev/null; git checkout 524e7ba -- . 2>/dev/null; echo "=== types.ts on main ==="; git show 524e7ba:src/lib/adapters/types.ts; echo "=== types.ts after merge ==="; git show HEAD:src/lib/adapters/types.ts)
+I made a mess with stash/checkout. Let me restore properly.
+Bash(git checkout HEAD -- . && git stash pop 2>&1 | tail -3; git status)
+Now let me check if the smithery test failure is pre-existing on main (unrelated to the merge).
+Bash(git stash -u; git checkout 524e7ba 2>&1 | tail -2; npx vitest run src/lib/adapters/smithery.test.ts 2>&1 | tail -15; git checkout main 2>&1 | tail -1; git stash pop 2>&1 | tail -2)
+The smithery test failure is **pre-existing on main** — it exists at commit `524e7ba` before any merge. The merge itself was a clean fast-forward and introduced no failures. Let me look at the smithery adapter to understand this pre-existing issue.
+Bash(cat src/lib/adapters/smithery.ts; echo "=== TEST ==="; cat src/lib/adapters/smithery.test.ts)
+The test `supports mcp and agent only` expects `supports('agent')` to be `true`, but the adapter actually supports `'mcp' || 'skill'`. This is a **stale test**, pre-existing on main and unrelated to the brave merge. Let me confirm the adapter's intended behavior before deciding.
+Bash(git log --oneline -3 -- src/lib/adapters/smithery.ts; echo "=== show what 524e7ba changed in smithery ==="; git show 524e7ba -- src/lib/adapters/smithery.ts src/lib/adapters/smithery.test.ts | head -80)
+Confirmed: commit `524e7ba` (on main, pre-merge) changed the adapter's `supports` from `'mcp' || 'agent'` to `'mcp' || 'skill'` but forgot to update the test. This stale test has been failing on main independently of the brave merge. I'll fix the test to match the adapter's intended behavior.
+Bash(npm run typecheck 2>&1 | tail -5 && echo "=== TEST ===" && npm run test 2>&1 | tail -8)
+All 44 tests pass and typecheck is clean. Now let me commit. The merge was a fast-forward, so I need a commit to capture the test fix and summarize the merge.
+Bash(git add src/lib/adapters/smithery.test.ts && git commit --no-edit -m "$(cat <<'EOF'
+Merge sandcastle/issue-3: add Brave Search API adapter
+
+Merged the Brave Search API adapter (issue #3), which also extracts a
+shared githubUrlOf helper for search adapters.
+
+Also fixed a pre-existing stale test in smithery.test.ts: commit 524e7ba
+changed the adapter to support 'mcp' || 'skill' but left the test
+asserting 'agent'. Updated the test to match the intended behavior.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+EOF
+)" && git log --oneline -3)
+Now let me close issue #3.
+Bash(gh issue close 3 --comment "Completed by Sandcastle")
+Done. Summary of what I did:
+
+## Merge: `sandcastle/issue-3` — Brave Search API adapter
+
+1. **Merged** `sandcastle/issue-3` — a clean **fast-forward** merge, no conflicts. It added the Brave Search adapter (`brave.ts` + tests), registered it in the adapter index/config/rank, extended the `AdapterId` type with `'brave'`, and extracted a shared `githubUrlOf` helper.
+
+2. **Verification** — `npm run typecheck` passed. `npm run test` initially showed **1 failing test** in `smithery.test.ts`.
+
+3. **Diagnosed the failure as pre-existing**, not caused by the merge. I confirmed it fails at `524e7ba` on `main` before any merge. Commit `524e7ba` ("remove smithery.ai api call") changed the adapter's `supports` from `'mcp' || 'agent'` to `'mcp' || 'skill'` but never updated the corresponding test, which kept asserting `'agent'`. I fixed the stale test to match the adapter's intended behavior (`mcp` and `skill`).
+
+4. **Re-verified** — typecheck clean, all **44 tests pass** (11 files).
+
+5. **Committed** the merge + test fix as a single summarizing commit (`2b11ec3`).
+
+6. **Closed issue #3** with the completion comment.
+
+<promise>COMPLETE</promise>
+Agent stopped
+Capturing session
+Collecting commits
+Collecting commits done (0.0s)
+Agent signaled completion after 1 iteration(s).
+Run complete: agent finished after 1 iteration(s).
+Context window: 30k
