@@ -1,17 +1,10 @@
+import { githubUrlOf } from './github-url';
 import type { FetchLike, SearchAdapter, SearchResult } from './types';
 
 interface BraveWebResult {
   title?: string;
   url?: string;
   description?: string;
-}
-
-function githubUrlOf(link: string): string | undefined {
-  try {
-    return new URL(link).hostname.replace(/^www\./, '') === 'github.com' ? link : undefined;
-  } catch {
-    return undefined;
-  }
 }
 
 export function createBraveAdapter(

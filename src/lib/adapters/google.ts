@@ -1,17 +1,10 @@
+import { githubUrlOf } from './github-url';
 import type { FetchLike, SearchAdapter, SearchResult } from './types';
 
 interface DerivedStructData {
   title?: string;
   link?: string;
   snippets?: { snippet?: string }[];
-}
-
-function githubUrlOf(link: string): string | undefined {
-  try {
-    return new URL(link).hostname.replace(/^www\./, '') === 'github.com' ? link : undefined;
-  } catch {
-    return undefined;
-  }
 }
 
 export function createGoogleAdapter(
