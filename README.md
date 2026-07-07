@@ -1,56 +1,88 @@
-# afk-1
+# AI Component Search
 
-A basic TypeScript CLI template scaffolded with [Commander](https://github.com/tj/commander.js),
-[Vitest](https://vitest.dev/), and strict type checking.
+A Next.js web app for searching AI marketplaces. Describe an AI **Skill**,
+**Agent**, **Prompt**, or **MCP server** and get back a unified,
+de-duplicated, ranked list of links from curated marketplaces and GitHub, with
+a Google search fallback for broader coverage.
 
 ## Getting started
 
 ```bash
 npm ci
+cp .env.example .env.local   # optional — see Configuration below
+npm run dev
 ```
 
-## Usage
+Then open http://localhost:3000.
 
-Run the CLI directly with `tsx` (no build step needed):
+## How it works
 
-```bash
-npm run cli -- greet Ada
-# => Hello, Ada!
+The UI posts a component type + free-text description to `/api/search`, which
+fans out to source adapters in parallel, merges and de-duplicates the
+results by canonical URL, ranks them, and returns a unified list along with a
+per-source status (`ok`, `disabled`, `error`). The UI lets you filter results
+by source.
 
-npm run cli -- greet
-# => Hello, there!
+| Component type | Sources queried          |
+| --------------- | ------------------------ |
+| Skill            | SkillsMP, GitHub, Google |
+| MCP server       | Smithery, GitHub, Google |
+| Agent            | Smithery, GitHub, Google |
+| Prompt           | GitHub, Google           |
 
-npm run cli -- --help
-```
+See `docs/superpowers/specs/2026-07-06-ai-component-search-website-design.md`
+for the full design.
 
-Or build and run the compiled output:
+## Configuration
 
-```bash
-npm run build
-node dist/index.js greet Ada
-```
+All environment variables are optional — each adapter self-disables when its
+required keys are missing, and the app still works with GitHub and SkillsMP
+running live out of the box.
+
+| Variable              | Used by  | Required for adapter? |
+| ---------------------- | -------- | --------------------- |
+| `GITHUB_TOKEN`         | GitHub   | No (raises rate limit) |
+| `SKILLSMP_API_KEY`     | SkillsMP | No (raises rate limit) |
+| `SMITHERY_API_KEY`     | Smithery | Yes |
+| `GOOGLE_CSE_API_KEY`   | Google   | Yes (both required) |
+| `GOOGLE_CSE_CX`        | Google   | Yes (both required) |
+
+Copy `.env.example` to `.env.local` and fill in whichever keys you have.
 
 ## Scripts
 
-| Script               | Description                           |
-| -------------------- | ------------------------------------- |
-| `npm run cli`        | Run the CLI via `tsx`                 |
-| `npm run build`      | Compile TypeScript to `dist/`         |
-| `npm run typecheck`  | Type-check without emitting           |
-| `npm run test`       | Run the Vitest suite once             |
-| `npm run test:watch` | Run Vitest in watch mode              |
-| `npm run ci`         | Type-check and run tests (used by CI) |
+| Script              | Description                            |
+| ------------------- | --------------------------------------- |
+| `npm run dev`        | Run the Next.js dev server             |
+| `npm run build`      | Build for production                   |
+| `npm run start`      | Run the production build               |
+| `npm run typecheck`  | Type-check without emitting            |
+| `npm run test`       | Run the Vitest suite once              |
+| `npm run test:watch` | Run Vitest in watch mode               |
+| `npm run ci`         | Type-check and run tests (used by CI)  |
 
 ## Project structure
 
 ```
 src/
-  index.ts       # CLI entry point (#!/usr/bin/env node)
-  cli.ts         # buildProgram() — Commander program, testable
-  cli.test.ts    # CLI tests
-  greet.ts       # example command logic
-  greet.test.ts  # greet tests
+  app/
+    page.tsx                # search UI (client component)
+    layout.tsx
+    api/search/route.ts      # orchestrator API endpoint
+  components/
+    SearchForm.tsx
+    ResultsList.tsx
+    ResultCard.tsx
+    SourceFilter.tsx
+  lib/
+    adapters/                # per-source adapters (github, smithery, skillsmp, google)
+    search/                  # orchestrator, dedupe, rank
+    config.ts                # env reading + adapter enablement
+    types.ts                 # shared types (ComponentType, SearchResult, ...)
 ```
+
+Each adapter, the dedupe/rank logic, and the API route have matching
+`*.test.ts` files under Vitest.
 
 ## Continuous integration
 
