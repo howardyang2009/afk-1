@@ -10,7 +10,12 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
     createGithubAdapter({ fetchFn, token: config.githubToken }),
     createSkillsmpAdapter({ fetchFn, apiKey: config.skillsmpKey }),
     createSmitheryAdapter({ fetchFn, apiKey: config.smitheryKey }),
-    createGoogleAdapter({ fetchFn, apiKey: config.googleApiKey, cx: config.googleCx }),
+    createGoogleAdapter({
+      fetchFn,
+      apiKey: config.googleApiKey,
+      projectId: config.googleProjectId,
+      engineId: config.googleEngineId,
+    }),
   ];
 }
 

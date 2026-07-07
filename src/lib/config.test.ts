@@ -10,13 +10,15 @@ describe('getConfig', () => {
   it('reads adapter keys from the environment', () => {
     process.env.GITHUB_TOKEN = 'gh';
     process.env.SMITHERY_API_KEY = 'sm';
-    process.env.GOOGLE_CSE_API_KEY = 'gk';
-    process.env.GOOGLE_CSE_CX = 'cx';
+    process.env.GOOGLE_SEARCH_API_KEY = 'gk';
+    process.env.GOOGLE_SEARCH_PROJECT_ID = 'proj';
+    process.env.GOOGLE_SEARCH_ENGINE_ID = 'engine';
     const cfg = getConfig();
     expect(cfg.githubToken).toBe('gh');
     expect(cfg.smitheryKey).toBe('sm');
     expect(cfg.googleApiKey).toBe('gk');
-    expect(cfg.googleCx).toBe('cx');
+    expect(cfg.googleProjectId).toBe('proj');
+    expect(cfg.googleEngineId).toBe('engine');
   });
 
   it('leaves missing keys undefined', () => {

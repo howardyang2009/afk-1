@@ -44,8 +44,9 @@ running live out of the box.
 | `GITHUB_TOKEN`         | GitHub   | No (raises rate limit) |
 | `SKILLSMP_API_KEY`     | SkillsMP | No (raises rate limit) |
 | `SMITHERY_API_KEY`     | Smithery | Yes |
-| `GOOGLE_CSE_API_KEY`   | Google   | Yes (both required) |
-| `GOOGLE_CSE_CX`        | Google   | Yes (both required) |
+| `GOOGLE_SEARCH_API_KEY`    | Google   | Yes (all three required) |
+| `GOOGLE_SEARCH_PROJECT_ID` | Google   | Yes (all three required) |
+| `GOOGLE_SEARCH_ENGINE_ID`  | Google   | Yes (all three required) |
 
 Copy `.env.example` to `.env.local` and fill in whichever keys you have.
 
