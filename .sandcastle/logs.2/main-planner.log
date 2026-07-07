@@ -1,0 +1,52 @@
+
+--- Run started: 2026-07-07T16:47:28.447Z ---
+Sandcastle Run
+  Agent: planner
+  Sandbox: docker
+  Max iterations: 1
+  Branch: main
+Iteration 1/1
+Setting up sandbox
+  npm install
+Setting up sandbox done (1.9s)
+Expanding shell expressions
+  gh issue list --state open --label Sandcastle --limit 100 --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]' → ~65 tokens
+Expanding shell expressions done (0.8s)
+Agent started
+There's only one open issue (#2), so there are no possible cross-issue dependencies — it's inherently unblocked.
+
+<plan>
+{"issues": [{"id": "2", "title": "add Model search", "branch": "sandcastle/issue-2"}]}
+</plan>
+Agent stopped
+Capturing session
+Collecting commits
+Collecting commits done (0.0s)
+Reached max iterations (1).
+Run complete: reached 1 iteration(s) without completion signal.
+Context window: 21k
+
+--- Run started: 2026-07-07T16:51:55.527Z ---
+Sandcastle Run
+  Agent: planner
+  Sandbox: docker
+  Max iterations: 1
+  Branch: main
+Iteration 1/1
+Setting up sandbox
+  npm install
+Setting up sandbox done (1.7s)
+Expanding shell expressions
+  gh issue list --state open --label Sandcastle --limit 100 --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]' → ~1 tokens
+Expanding shell expressions done (0.9s)
+Agent started
+There are no open issues in the provided list, so there is nothing to plan.
+
+<plan>{"issues": []}</plan>
+Agent stopped
+Capturing session
+Collecting commits
+Collecting commits done (0.0s)
+Reached max iterations (1).
+Run complete: reached 1 iteration(s) without completion signal.
+Context window: 21k

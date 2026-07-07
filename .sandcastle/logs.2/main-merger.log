@@ -1,0 +1,36 @@
+
+--- Run started: 2026-07-07T16:51:18.250Z ---
+Sandcastle Run
+  Agent: merger
+  Sandbox: docker
+  Max iterations: 1
+  Branch: main
+Iteration 1/1
+Setting up sandbox
+  npm install
+Setting up sandbox done (1.7s)
+Agent started
+I'll start by examining the branch and then performing the merge.
+Bash(git log --oneline sandcastle/issue-2 -5 2>&1 && echo "---BRANCHES---" && git branch -a 2>&1)
+Bash(git merge sandcastle/issue-2 --no-edit 2>&1)
+Fast-forward merge, no conflicts. Now let me verify with typecheck and tests.
+Bash(npm run typecheck 2>&1; echo "===TEST==="; npm run test 2>&1)
+Everything passes. The merge was a fast-forward, so the branch history is already integrated. Let me check the status.
+Bash(git status 2>&1 && echo "---" && git log --oneline -3 2>&1)
+The merge was a clean fast-forward — the working tree is clean (only untracked `.claude/`, which isn't part of this task). Since there were no conflicts and nothing new to commit beyond the fast-forwarded history, there's no separate merge commit to create. Now let me close the issue.
+Bash(gh issue close 2 --comment "Completed by Sandcastle" 2>&1)
+Done. Summary:
+
+- **Merged `sandcastle/issue-2`** into `main` — it fast-forwarded cleanly (Hugging Face adapter for Model search), no conflicts to resolve.
+- **Verified**: `npm run typecheck` passed and `npm run test` passed (12 files, 53 tests).
+- **Commit**: Because it was a fast-forward, git integrated the branch's existing commit directly; there were no conflicts and no residual changes, so there was nothing to wrap in a separate merge commit.
+- **Closed issue #2** with the "Completed by Sandcastle" comment.
+
+<promise>COMPLETE</promise>
+Agent stopped
+Capturing session
+Collecting commits
+Collecting commits done (0.0s)
+Agent signaled completion after 1 iteration(s).
+Run complete: agent finished after 1 iteration(s).
+Context window: 23k

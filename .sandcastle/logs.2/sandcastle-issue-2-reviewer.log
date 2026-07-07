@@ -1,0 +1,32 @@
+
+--- Run started: 2026-07-07T16:50:31.630Z ---
+Iteration 1/1
+Setting up sandbox
+Setting up sandbox done (0.3s)
+Expanding shell expressions
+  git diff main...sandcastle/issue-2 → ~2778 tokens
+  git log main..sandcastle/issue-2 --oneline → ~17 tokens
+Expanding shell expressions done (0.1s)
+Agent started
+I'll examine the changes in context by reading the relevant files, especially to compare against existing adapters for consistency.The new adapter closely mirrors the existing `skillsmp`, `github`, and `brave` adapters — same `encodeURIComponent`/headers/filter-map/throw patterns and naming. Let me verify tests and types pass.
+Bash(npx vitest run src/lib/adapters/huggingface.test.ts src/lib/adapters/index.test.ts 2>&1 | tail -30)
+Bash(npx tsc --noEmit 2>&1 | tail -20)
+Everything passes and typechecks cleanly. Reviewing the new `huggingface.ts` adapter against the rest of the codebase:
+
+- **Consistency**: It follows the exact conventions of the existing adapters — `encodeURIComponent(query)` into `q`, the `Record<string, string>` headers with conditional `Authorization` (matching `skillsmp.ts`/`github.ts`), the `.filter(...).map(...)` shape and `throw new Error(...: ${res.status})` pattern (matching `brave.ts`), and `source: '...' as const`.
+- **Correctness**: The type guard on `id`, the non-array body guard, error handling, and token gating are all handled and covered by comprehensive tests (14 passing).
+- **Type safety**: No `any`; the single `as unknown` cast on the JSON body is guarded by `Array.isArray` before the narrowing cast — the same defensive style used elsewhere.
+- **Supporting changes**: `ComponentType`/`AdapterId` unions, config, registry wiring, rank weight, route schema, and UI copy are all minimal and consistent.
+
+The code is already clean, well-named, free of unnecessary complexity or nesting, and matches the established adapter pattern precisely. There are no improvements to make without descending into pointless churn, so per the review guidance I'm making no changes.
+
+<promise>COMPLETE</promise>
+Agent stopped
+Capturing session
+No commits to sync out
+No commits to sync out done (0.0s)
+Collecting commits
+Collecting commits done (0.0s)
+Agent signaled completion after 1 iteration(s).
+Run complete: agent finished after 1 iteration(s).
+Context window: 32k

@@ -1,0 +1,93 @@
+
+--- Run started: 2026-07-07T16:47:43.559Z ---
+Iteration 1/100
+Setting up sandbox
+Setting up sandbox done (0.3s)
+Expanding shell expressions
+  git log -n 10 --format="%H%n%ad%n%B---" --date=short → ~770 tokens
+Expanding shell expressions done (0.1s)
+Agent started
+Bash(gh issue view 2)
+Bash(git branch --show-current && git log --oneline -3)
+Bash(ls src/lib/adapters/ && echo "---TYPES---" && cat src/lib/adapters/types.ts)
+Bash(cat src/lib/adapters/brave.ts && echo "===INDEX===" && cat src/lib/adapters/index.ts)
+Bash(cat src/lib/adapters/brave.test.ts)
+Bash(cat src/lib/adapters/index.test.ts && echo "===CONFIG===" && cat src/lib/config.ts && echo "===RANK===" && cat src/lib/search/rank.ts)
+Bash(grep -rn "ComponentType\|'skill'\|'agent'\|'prompt'\|'mcp'\|componentType\|type ===" src --include=*.ts --include=*.tsx -l | grep -v adapters)
+Bash(cat src/lib/types.ts && echo "===ROUTE===" && cat src/app/api/search/route.ts && echo "===ORCH===" && cat src/lib/search/orchestrator.ts)
+Bash(cat src/components/SearchForm.tsx && echo "===PAGE===" && cat src/app/page.tsx)
+Bash(cat src/lib/adapters/github.ts && echo "===SKILLSMP===" && cat src/lib/adapters/skillsmp.ts && echo "===GHURL===" && cat src/lib/adapters/github-url.ts)
+Now I have a full picture. The issue asks to add a Hugging Face ("Hugg") adapter for a new "Model" component type. Let me set up tasks and start with RGR.
+
+Let me update the core types first, then write the adapter test (RED).Now the RED test for the Hugging Face adapter:Now the GREEN implementation:
+Bash(npx vitest run src/lib/adapters/huggingface.test.ts 2>&1 | tail -20)
+Adapter tests pass. Now wire it into the registry, config, rank, route, and UI.Now update the index.test.ts registry expectations and add a route for `model`:Let me check the route test for any enum-related assertions, then run typecheck and full test suite:
+Bash(grep -n "mcp\|model\|enum\|type" src/app/api/search/route.test.ts | head; echo "==="; npm run typecheck 2>&1 | tail -15)
+Typecheck clean. Now the full test suite:
+Bash(npm run test 2>&1 | tail -25)
+All 53 tests pass and typecheck is clean. Let me verify the full diff before committing:
+Bash(git status && echo "===" && git diff --stat)
+Bash(git add -A && git commit -q -F - <<'EOF'
+RALPH: Add Hugging Face adapter for Model search (issue #2)
+
+Task: add a "Model" component type and a Hugging Face ("Hugg") adapter
+that searches https://huggingface.co/api/models (issue #2, "Sandcastle"
+label; no parent PRD). Model sits alongside skill/agent/prompt/mcp.
+
+Key decisions:
+- New ComponentType 'model' and AdapterId 'huggingface' in adapters/types.ts.
+- huggingface.ts follows the skillsmp shape: supports() gated to 'model'
+  only, isEnabled() always true (public API); optional HUGGINGFACE_API_TOKEN
+  sent as Bearer for higher rate limits.
+- GET /api/models?search=&limit=10&sort=likes&direction=-1; maps entries to
+  {title:id, url:huggingface.co/<id>, description:pipeline_tag, stars:likes},
+  filtering entries missing an id, tolerating a non-array body.
+- Weighted 3 in rank.ts SOURCE_WEIGHT (first-party model marketplace).
+- Wired into createAdapters + config; route zod enum, SearchForm dropdown,
+  and page copy updated to include Model. github/google/brave (supports()
+  => true) also serve model queries.
+
+Files: src/lib/adapters/huggingface.ts (+ huggingface.test.ts),
+adapters/index.ts, adapters/index.test.ts, adapters/types.ts, lib/config.ts,
+search/rank.ts, app/api/search/route.ts, components/SearchForm.tsx, app/page.tsx.
+
+Notes for next iteration: typecheck clean; 53/53 tests green. HF list
+endpoint has no description field, so pipeline_tag stands in.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+EOF
+git log --oneline -1)
+Committed. Let me leave a progress comment on the issue (not closing it, per instructions):
+Bash(gh issue comment 2 --body "Added a Hugging Face adapter for **Model** search (branch \`sandcastle/issue-2\`, commit f9ed46e).
+
+- New \`model\` component type alongside skill/agent/prompt/mcp, selectable in the search UI.
+- \`createHuggingfaceAdapter\` queries \`GET https://huggingface.co/api/models?search=…&limit=10&sort=likes&direction=-1\` (public API, optional \`HUGGINGFACE_API_TOKEN\` bearer for rate limits), mapping each model to title=\`id\`, url=\`https://huggingface.co/<id>\`, description=\`pipeline_tag\`, stars=\`likes\`.
+- Registered in \`createAdapters\`, weighted 3 in rank, and wired through config, the \`/api/search\` route enum, the search form, and homepage copy.
+- Full RGR: new \`huggingface.test.ts\` (8 cases) plus updated registry tests. \`npm run typecheck\` clean; \`npm run test\` 53/53 green.
+
+Leaving the issue open for review.")
+Done. Issue #2 is complete.
+
+## Summary
+
+Added a Hugging Face ("Hugg") adapter for **Model** search, treating Model as a first-class component type alongside skill/agent/prompt/mcp.
+
+**Approach (RGR):** Wrote `huggingface.test.ts` first (8 cases covering enablement, type gating, endpoint/query, auth header, result mapping, id filtering, non-array bodies, and error status), then the implementation to pass them.
+
+**Key changes:**
+- `src/lib/adapters/types.ts` — new `'model'` `ComponentType` and `'huggingface'` `AdapterId`.
+- `src/lib/adapters/huggingface.ts` — follows the skillsmp shape: `supports()` gated to `'model'` only, `isEnabled()` always true (public API), optional `HUGGINGFACE_API_TOKEN` bearer. Calls `GET /api/models?search=…&limit=10&sort=likes&direction=-1`, maps entries to `{title:id, url:huggingface.co/<id>, description:pipeline_tag, stars:likes}`, filters ids and tolerates a non-array body.
+- Wired into `createAdapters`, `config`, `rank.ts` (weight 3), the `/api/search` zod enum, the `SearchForm` dropdown, and homepage copy.
+
+**Verification:** `npm run typecheck` clean; `npm run test` 53/53 green. Committed as `f9ed46e` on `sandcastle/issue-2`, and left a progress comment on issue #2 (not closed).
+
+<promise>COMPLETE</promise>
+Agent stopped
+Capturing session
+Syncing 1 commit to host
+Syncing 1 commit to host done (0.0s)
+Collecting commits
+Collecting commits done (0.1s)
+Agent signaled completion after 1 iteration(s).
+Run complete: agent finished after 1 iteration(s).
+Context window: 44k
