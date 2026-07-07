@@ -5,6 +5,7 @@ const SOURCE_WEIGHT: Record<AdapterId, number> = {
   smithery: 3,
   github: 2,
   google: 1,
+  brave: 1,
 };
 
 function score(result: SearchResult): number {

@@ -1,4 +1,5 @@
 import type { AppConfig } from '../config';
+import { createBraveAdapter } from './brave';
 import { createGithubAdapter } from './github';
 import { createGoogleAdapter } from './google';
 import { createSkillsmpAdapter } from './skillsmp';
@@ -16,6 +17,7 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
       projectId: config.googleProjectId,
       engineId: config.googleEngineId,
     }),
+    createBraveAdapter({ fetchFn, apiKey: config.braveKey }),
   ];
 }
 

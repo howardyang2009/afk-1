@@ -1,5 +1,5 @@
 export type ComponentType = 'skill' | 'agent' | 'prompt' | 'mcp';
-export type AdapterId = 'github' | 'smithery' | 'skillsmp' | 'google';
+export type AdapterId = 'github' | 'smithery' | 'skillsmp' | 'google' | 'brave';
 
 export interface SearchResult {
   title: string;
