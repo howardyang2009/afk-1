@@ -6,6 +6,7 @@ const SOURCE_WEIGHT: Record<AdapterId, number> = {
   github: 2,
   google: 1,
   brave: 1,
+  huggingface: 3,
 };
 
 function score(result: SearchResult): number {

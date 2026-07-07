@@ -6,6 +6,7 @@ export interface AppConfig {
   googleProjectId?: string;
   googleEngineId?: string;
   braveKey?: string;
+  huggingfaceToken?: string;
 }
 
 export function getConfig(): AppConfig {
@@ -17,5 +18,6 @@ export function getConfig(): AppConfig {
     googleProjectId: process.env.GOOGLE_SEARCH_PROJECT_ID || undefined,
     googleEngineId: process.env.GOOGLE_SEARCH_ENGINE_ID || undefined,
     braveKey: process.env.BRAVE_SEARCH_API_KEY || undefined,
+    huggingfaceToken: process.env.HUGGINGFACE_API_TOKEN || undefined,
   };
 }

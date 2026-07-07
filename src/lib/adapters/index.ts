@@ -2,6 +2,7 @@ import type { AppConfig } from '../config';
 import { createBraveAdapter } from './brave';
 import { createGithubAdapter } from './github';
 import { createGoogleAdapter } from './google';
+import { createHuggingfaceAdapter } from './huggingface';
 import { createSkillsmpAdapter } from './skillsmp';
 import { createSmitheryAdapter } from './smithery';
 import type { ComponentType, FetchLike, SearchAdapter } from './types';
@@ -18,6 +19,7 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
       engineId: config.googleEngineId,
     }),
     createBraveAdapter({ fetchFn, apiKey: config.braveKey }),
+    createHuggingfaceAdapter({ fetchFn, token: config.huggingfaceToken }),
   ];
 }
 

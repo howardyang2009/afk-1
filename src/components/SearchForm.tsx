@@ -8,6 +8,7 @@ const TYPES: { value: ComponentType; label: string }[] = [
   { value: 'agent', label: 'Agent' },
   { value: 'prompt', label: 'Prompt' },
   { value: 'mcp', label: 'MCP server' },
+  { value: 'model', label: 'Model' },
 ];
 
 export function SearchForm({

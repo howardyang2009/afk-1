@@ -2,15 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { createAdapters, selectAdapters } from './index';
 
 describe('adapter registry', () => {
-  it('creates github, skillsmp, google and brave adapters', () => {
+  it('creates github, skillsmp, google, brave and huggingface adapters', () => {
     const ids = createAdapters({}).map((a) => a.id).sort();
-    expect(ids).toEqual(['brave', 'github', 'google', 'skillsmp']);
+    expect(ids).toEqual(['brave', 'github', 'google', 'huggingface', 'skillsmp']);
   });
 
   it('routes skill to skillsmp + github + google + brave (google/brave disabled by default)', () => {
     const adapters = createAdapters({});
     const ids = selectAdapters(adapters, 'skill').map((a) => a.id).sort();
     expect(ids).toEqual(['brave', 'github', 'google', 'skillsmp']);
+  });
+
+  it('routes model to huggingface + github + google + brave', () => {
+    const ids = selectAdapters(createAdapters({}), 'model').map((a) => a.id).sort();
+    expect(ids).toEqual(['brave', 'github', 'google', 'huggingface']);
   });
 
   it('routes mcp to github + google + brave', () => {
