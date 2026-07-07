@@ -9,7 +9,7 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
   return [
     createGithubAdapter({ fetchFn, token: config.githubToken }),
     createSkillsmpAdapter({ fetchFn, apiKey: config.skillsmpKey }),
-    createSmitheryAdapter({ fetchFn, apiKey: config.smitheryKey }),
+    //createSmitheryAdapter({ fetchFn, apiKey: config.smitheryKey }),
     createGoogleAdapter({
       fetchFn,
       apiKey: config.googleApiKey,
