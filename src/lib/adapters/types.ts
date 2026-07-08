@@ -1,5 +1,12 @@
-export type ComponentType = 'skill' | 'agent' | 'prompt' | 'mcp' | 'model';
-export type AdapterId = 'github' | 'smithery' | 'skillsmp' | 'google' | 'brave' | 'huggingface';
+export type ComponentType = 'skill' | 'agent' | 'prompt' | 'mcp' | 'model' | 'claude-plugin';
+export type AdapterId =
+  | 'github'
+  | 'smithery'
+  | 'skillsmp'
+  | 'google'
+  | 'brave'
+  | 'huggingface'
+  | 'claude-plugins-dev';
 
 export interface SearchResult {
   title: string;

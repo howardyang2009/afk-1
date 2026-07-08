@@ -4,7 +4,7 @@ import { createAdapters, selectAdapters } from '@/lib/adapters';
 import { runSearch } from '@/lib/search/orchestrator';
 
 const RequestSchema = z.object({
-  type: z.enum(['skill', 'agent', 'prompt', 'mcp', 'model']),
+  type: z.enum(['skill', 'agent', 'prompt', 'mcp', 'model', 'claude-plugin']),
   query: z.string().trim().min(1).max(200),
 });
 

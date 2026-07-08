@@ -14,7 +14,7 @@ export function createSmitheryAdapter(
   const fetchFn = deps.fetchFn ?? fetch;
   return {
     id: 'smithery',
-    supports: (type: ComponentType) => type === 'mcp' || type === 'skill',
+    supports: (type: ComponentType) => type === 'mcp',
     isEnabled: () => Boolean(deps.apiKey),
     async search(query: string): Promise<SearchResult[]> {
       const q = encodeURIComponent(query);

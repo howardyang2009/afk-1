@@ -9,6 +9,7 @@ const TYPES: { value: ComponentType; label: string }[] = [
   { value: 'prompt', label: 'Prompt' },
   { value: 'mcp', label: 'MCP server' },
   { value: 'model', label: 'Model' },
+  { value: 'claude-plugin', label: 'Claude Plugin' },
 ];
 
 export function SearchForm({

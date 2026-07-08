@@ -1,5 +1,6 @@
 import type { AppConfig } from '../config';
 import { createBraveAdapter } from './brave';
+import { createClaudePluginsDevAdapter } from './claude-plugins-dev';
 import { createGithubAdapter } from './github';
 import { createGoogleAdapter } from './google';
 import { createHuggingfaceAdapter } from './huggingface';
@@ -11,7 +12,7 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
   return [
     createGithubAdapter({ fetchFn, token: config.githubToken }),
     createSkillsmpAdapter({ fetchFn, apiKey: config.skillsmpKey }),
-    //createSmitheryAdapter({ fetchFn, apiKey: config.smitheryKey }),
+    createSmitheryAdapter({ fetchFn, apiKey: config.smitheryKey }),
     createGoogleAdapter({
       fetchFn,
       apiKey: config.googleApiKey,
@@ -20,6 +21,7 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
     }),
     createBraveAdapter({ fetchFn, apiKey: config.braveKey }),
     createHuggingfaceAdapter({ fetchFn, token: config.huggingfaceToken }),
+    createClaudePluginsDevAdapter({ fetchFn }),
   ];
 }
 
