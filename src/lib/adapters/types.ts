@@ -16,7 +16,8 @@ export type AdapterId =
   | 'brave'
   | 'huggingface'
   | 'claude-plugins-dev'
-  | 'claude-plugin-hub';
+  | 'claude-plugin-hub'
+  | 'claude-skills-info';
 
 export interface SearchResult {
   title: string;

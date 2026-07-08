@@ -2,6 +2,7 @@ import type { AppConfig } from '../config';
 import { createBraveAdapter } from './brave';
 import { createClaudePluginHubAdapter } from './claude-plugin-hub';
 import { createClaudePluginsDevAdapter } from './claude-plugins-dev';
+import { createClaudeSkillsInfoAdapter } from './claude-skills-info';
 import { createGithubAdapter } from './github';
 import { createGoogleAdapter } from './google';
 import { createHuggingfaceAdapter } from './huggingface';
@@ -24,6 +25,7 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
     createHuggingfaceAdapter({ fetchFn, token: config.huggingfaceToken }),
     //createClaudePluginsDevAdapter({ fetchFn }),
     //createClaudePluginHubAdapter({ fetchFn }),
+    createClaudeSkillsInfoAdapter({ fetchFn }),
   ];
 }
 

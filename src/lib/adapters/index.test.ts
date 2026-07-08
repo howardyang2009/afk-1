@@ -2,20 +2,28 @@ import { describe, expect, it } from 'vitest';
 import { createAdapters, selectAdapters } from './index';
 
 describe('adapter registry', () => {
-  it('creates github, skillsmp, smithery, google, brave and huggingface adapters', () => {
+  it('creates github, skillsmp, smithery, google, brave, huggingface and claude-skills-info adapters', () => {
     const ids = createAdapters({}).map((a) => a.id).sort();
-    expect(ids).toEqual(['brave', 'github', 'google', 'huggingface', 'skillsmp', 'smithery']);
+    expect(ids).toEqual([
+      'brave',
+      'claude-skills-info',
+      'github',
+      'google',
+      'huggingface',
+      'skillsmp',
+      'smithery',
+    ]);
   });
 
-  it('routes skill to skillsmp + github + google + brave (google/brave disabled by default)', () => {
+  it('routes skill to skillsmp + github + google + brave + claude-skills-info (google/brave disabled by default)', () => {
     const adapters = createAdapters({});
     const ids = selectAdapters(adapters, 'skill').map((a) => a.id).sort();
-    expect(ids).toEqual(['brave', 'github', 'google', 'skillsmp']);
+    expect(ids).toEqual(['brave', 'claude-skills-info', 'github', 'google', 'skillsmp']);
   });
 
-  it('routes claude-plugin to github + google + brave', () => {
+  it('routes claude-plugin to github + google + brave + claude-skills-info', () => {
     const ids = selectAdapters(createAdapters({}), 'claude-plugin').map((a) => a.id).sort();
-    expect(ids).toEqual(['brave', 'github', 'google']);
+    expect(ids).toEqual(['brave', 'claude-skills-info', 'github', 'google']);
   });
 
   it('routes model to huggingface + github + google + brave', () => {
@@ -28,9 +36,9 @@ describe('adapter registry', () => {
     expect(ids).toEqual(['brave', 'github', 'google', 'smithery']);
   });
 
-  it('routes subagent to github + google + brave', () => {
+  it('routes subagent to github + google + brave + claude-skills-info', () => {
     const ids = selectAdapters(createAdapters({}), 'subagent').map((a) => a.id).sort();
-    expect(ids).toEqual(['brave', 'github', 'google']);
+    expect(ids).toEqual(['brave', 'claude-skills-info', 'github', 'google']);
   });
 
   it('routes prompt to github + google + brave', () => {
@@ -38,18 +46,18 @@ describe('adapter registry', () => {
     expect(ids).toEqual(['brave', 'github', 'google']);
   });
 
-  it('routes hook to github + google + brave', () => {
+  it('routes hook to github + google + brave + claude-skills-info', () => {
     const ids = selectAdapters(createAdapters({}), 'hook').map((a) => a.id).sort();
-    expect(ids).toEqual(['brave', 'github', 'google']);
+    expect(ids).toEqual(['brave', 'claude-skills-info', 'github', 'google']);
   });
 
-  it('routes slash-command to github + google + brave', () => {
+  it('routes slash-command to github + google + brave + claude-skills-info', () => {
     const ids = selectAdapters(createAdapters({}), 'slash-command').map((a) => a.id).sort();
-    expect(ids).toEqual(['brave', 'github', 'google']);
+    expect(ids).toEqual(['brave', 'claude-skills-info', 'github', 'google']);
   });
 
-  it('routes claude-md to github + google + brave', () => {
+  it('routes claude-md to github + google + brave + claude-skills-info', () => {
     const ids = selectAdapters(createAdapters({}), 'claude-md').map((a) => a.id).sort();
-    expect(ids).toEqual(['brave', 'github', 'google']);
+    expect(ids).toEqual(['brave', 'claude-skills-info', 'github', 'google']);
   });
 });
