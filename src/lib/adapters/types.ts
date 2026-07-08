@@ -19,7 +19,8 @@ export type AdapterId =
   | 'claude-plugin-hub'
   | 'claude-skills-info'
   | 'skills-sh'
-  | 'skills-pawgrammer';
+  | 'skills-pawgrammer'
+  | 'skills-pub';
 
 export interface SearchResult {
   title: string;

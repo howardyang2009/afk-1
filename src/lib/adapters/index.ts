@@ -8,6 +8,7 @@ import { createGoogleAdapter } from './google';
 import { createHuggingfaceAdapter } from './huggingface';
 import { createSkillsmpAdapter } from './skillsmp';
 import { createSkillsPawgrammerAdapter } from './skills-pawgrammer';
+import { createSkillsPubAdapter } from './skills-pub';
 import { createSkillsShAdapter } from './skills-sh';
 import { createSmitheryAdapter } from './smithery';
 import type { ComponentType, FetchLike, SearchAdapter } from './types';
@@ -30,6 +31,7 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
     createClaudeSkillsInfoAdapter({ fetchFn }),
     createSkillsShAdapter({ fetchFn, token: config.skillsShToken }),
     createSkillsPawgrammerAdapter({ fetchFn }),
+    createSkillsPubAdapter({ fetchFn }),
   ];
 }
 

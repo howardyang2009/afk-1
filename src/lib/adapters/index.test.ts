@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createAdapters, selectAdapters } from './index';
 
 describe('adapter registry', () => {
-  it('creates github, skillsmp, smithery, google, brave, huggingface, claude-skills-info, skills-sh and skills-pawgrammer adapters', () => {
+  it('creates github, skillsmp, smithery, google, brave, huggingface, claude-skills-info, skills-sh, skills-pawgrammer and skills-pub adapters', () => {
     const ids = createAdapters({}).map((a) => a.id).sort();
     expect(ids).toEqual([
       'brave',
@@ -11,13 +11,14 @@ describe('adapter registry', () => {
       'google',
       'huggingface',
       'skills-pawgrammer',
+      'skills-pub',
       'skills-sh',
       'skillsmp',
       'smithery',
     ]);
   });
 
-  it('routes skill to skillsmp + github + google + brave + claude-skills-info + skills-sh + skills-pawgrammer (google/brave/skills-sh disabled by default)', () => {
+  it('routes skill to skillsmp + github + google + brave + claude-skills-info + skills-sh + skills-pawgrammer + skills-pub (google/brave/skills-sh disabled by default)', () => {
     const adapters = createAdapters({});
     const ids = selectAdapters(adapters, 'skill').map((a) => a.id).sort();
     expect(ids).toEqual([
@@ -26,6 +27,7 @@ describe('adapter registry', () => {
       'github',
       'google',
       'skills-pawgrammer',
+      'skills-pub',
       'skills-sh',
       'skillsmp',
     ]);
