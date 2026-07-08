@@ -1,4 +1,4 @@
-import type { FetchLike, SearchAdapter, SearchResult } from './types';
+import type { ComponentType, FetchLike, SearchAdapter, SearchResult } from './types';
 
 interface GithubRepo {
   full_name: string;
@@ -15,8 +15,8 @@ export function createGithubAdapter(
     id: 'github',
     supports: () => true,
     isEnabled: () => true,
-    async search(query: string): Promise<SearchResult[]> {
-      const q = encodeURIComponent(query);
+    async search(query: string, type: ComponentType): Promise<SearchResult[]> {
+      const q = encodeURIComponent(`ai ${type} for ${query}`);
       const headers: Record<string, string> = { Accept: 'application/vnd.github+json' };
       if (deps.token) headers.Authorization = `Bearer ${deps.token}`;
       const res = await fetchFn(

@@ -1,5 +1,5 @@
 import { githubUrlOf } from './github-url';
-import type { FetchLike, SearchAdapter, SearchResult } from './types';
+import type { ComponentType, FetchLike, SearchAdapter, SearchResult } from './types';
 
 interface BraveWebResult {
   title?: string;
@@ -15,8 +15,8 @@ export function createBraveAdapter(
     id: 'brave',
     supports: () => true,
     isEnabled: () => Boolean(deps.apiKey),
-    async search(query: string): Promise<SearchResult[]> {
-      const q = encodeURIComponent(query);
+    async search(query: string, type: ComponentType): Promise<SearchResult[]> {
+      const q = encodeURIComponent(`ai ${type} for ${query}`);
       const res = await fetchFn(
         `https://api.search.brave.com/res/v1/web/search?q=${q}&count=10`,
         {

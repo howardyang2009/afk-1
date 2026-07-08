@@ -25,7 +25,7 @@ describe('createBraveAdapter', () => {
     await adapter.search('hello world', 'prompt');
     const [url, init] = (fetchFn as unknown as ReturnType<typeof vi.fn>).mock.calls[0];
     expect(url).toContain('https://api.search.brave.com/res/v1/web/search');
-    expect(url).toContain('q=hello%20world');
+    expect(url).toContain('q=ai%20prompt%20for%20hello%20world');
     expect((init as RequestInit).headers).toMatchObject({
       'X-Subscription-Token': 'secret',
       Accept: 'application/json',
