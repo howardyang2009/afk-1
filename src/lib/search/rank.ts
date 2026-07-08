@@ -13,6 +13,8 @@ const SOURCE_WEIGHT: Record<AdapterId, number> = {
   'skills-sh': 3,
   'skills-pawgrammer': 3,
   'skills-pub': 3,
+  'skill-store-io': 3,
+  'terminal-skills-io': 3,
 };
 
 function score(result: SearchResult): number {

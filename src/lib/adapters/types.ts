@@ -20,7 +20,9 @@ export type AdapterId =
   | 'claude-skills-info'
   | 'skills-sh'
   | 'skills-pawgrammer'
-  | 'skills-pub';
+  | 'skills-pub'
+  | 'skill-store-io'
+  | 'terminal-skills-io';
 
 export interface SearchResult {
   title: string;

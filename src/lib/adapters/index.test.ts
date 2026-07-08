@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createAdapters, selectAdapters } from './index';
 
 describe('adapter registry', () => {
-  it('creates github, skillsmp, smithery, google, brave, huggingface, claude-skills-info, skills-sh, skills-pawgrammer and skills-pub adapters', () => {
+  it('creates github, skillsmp, smithery, google, brave, huggingface, claude-skills-info, skills-sh, skills-pawgrammer, skills-pub, skill-store-io and terminal-skills-io adapters', () => {
     const ids = createAdapters({}).map((a) => a.id).sort();
     expect(ids).toEqual([
       'brave',
@@ -10,15 +10,17 @@ describe('adapter registry', () => {
       'github',
       'google',
       'huggingface',
+      'skill-store-io',
       'skills-pawgrammer',
       'skills-pub',
       'skills-sh',
       'skillsmp',
       'smithery',
+      'terminal-skills-io',
     ]);
   });
 
-  it('routes skill to skillsmp + github + google + brave + claude-skills-info + skills-sh + skills-pawgrammer + skills-pub (google/brave/skills-sh disabled by default)', () => {
+  it('routes skill to skillsmp + github + google + brave + claude-skills-info + skills-sh + skills-pawgrammer + skills-pub + skill-store-io + terminal-skills-io (google/brave/skills-sh disabled by default)', () => {
     const adapters = createAdapters({});
     const ids = selectAdapters(adapters, 'skill').map((a) => a.id).sort();
     expect(ids).toEqual([
@@ -26,10 +28,12 @@ describe('adapter registry', () => {
       'claude-skills-info',
       'github',
       'google',
+      'skill-store-io',
       'skills-pawgrammer',
       'skills-pub',
       'skills-sh',
       'skillsmp',
+      'terminal-skills-io',
     ]);
   });
 
