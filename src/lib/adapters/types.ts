@@ -17,7 +17,8 @@ export type AdapterId =
   | 'huggingface'
   | 'claude-plugins-dev'
   | 'claude-plugin-hub'
-  | 'claude-skills-info';
+  | 'claude-skills-info'
+  | 'skills-sh';
 
 export interface SearchResult {
   title: string;
