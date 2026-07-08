@@ -29,7 +29,7 @@ interface ClaudePluginHubSearchResult {
 
 const SEARCH_TYPE: Partial<Record<ComponentType, string>> = {
   skill: 'skill',
-  agent: 'agent',
+  subagent: 'agent',
   'slash-command': 'command',
   hook: 'hook',
   mcp: 'mcp',

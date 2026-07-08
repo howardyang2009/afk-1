@@ -14,7 +14,7 @@ describe('createHuggingfaceAdapter', () => {
     const adapter = createHuggingfaceAdapter();
     expect(adapter.supports('model')).toBe(true);
     expect(adapter.supports('skill')).toBe(false);
-    expect(adapter.supports('agent')).toBe(false);
+    expect(adapter.supports('subagent')).toBe(false);
     expect(adapter.supports('prompt')).toBe(false);
     expect(adapter.supports('mcp')).toBe(false);
   });

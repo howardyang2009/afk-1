@@ -15,7 +15,7 @@ describe('createSmitheryAdapter', () => {
     const adapter = createSmitheryAdapter({ apiKey: 'k' });
     expect(adapter.supports('mcp')).toBe(true);
     expect(adapter.supports('skill')).toBe(false);
-    expect(adapter.supports('agent')).toBe(false);
+    expect(adapter.supports('subagent')).toBe(false);
     expect(adapter.supports('prompt')).toBe(false);
   });
 

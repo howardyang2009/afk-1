@@ -5,12 +5,13 @@ import type { ComponentType } from '@/lib/adapters/types';
 
 const TYPES: { value: ComponentType; label: string }[] = [
   { value: 'skill', label: 'Skill' },
-  { value: 'agent', label: 'Agent' },
+  { value: 'subagent', label: 'Subagent' },
   { value: 'prompt', label: 'Prompt' },
   { value: 'mcp', label: 'MCP server' },
   { value: 'hook', label: 'Hook' },
   { value: 'slash-command', label: 'Slash command' },
-  { value: 'claude-plugin', label: 'Claude Plugin' },
+  { value: 'claude-plugin', label: 'Claude plugin' },
+  { value: 'claude-md', label: 'CLAUDE.md' },
   { value: 'model', label: 'Model' },
 ];
 

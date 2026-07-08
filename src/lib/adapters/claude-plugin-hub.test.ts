@@ -10,11 +10,11 @@ describe('createClaudePluginHubAdapter', () => {
     expect(createClaudePluginHubAdapter().isEnabled()).toBe(true);
   });
 
-  it('supports claude-plugin, skill, agent, slash-command, hook and mcp only', () => {
+  it('supports claude-plugin, skill, subagent, slash-command, hook and mcp only', () => {
     const adapter = createClaudePluginHubAdapter();
     expect(adapter.supports('claude-plugin')).toBe(true);
     expect(adapter.supports('skill')).toBe(true);
-    expect(adapter.supports('agent')).toBe(true);
+    expect(adapter.supports('subagent')).toBe(true);
     expect(adapter.supports('slash-command')).toBe(true);
     expect(adapter.supports('hook')).toBe(true);
     expect(adapter.supports('mcp')).toBe(true);
@@ -106,7 +106,7 @@ describe('createClaudePluginHubAdapter', () => {
       ],
     });
     const adapter = createClaudePluginHubAdapter({ fetchFn });
-    const results = await adapter.search('docx', 'agent');
+    const results = await adapter.search('docx', 'subagent');
     expect(results[0].url).toBe('https://github.com/fix-fast/corgi');
     expect(results[0].githubUrl).toBe('https://github.com/fix-fast/corgi');
   });

@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <main>
       <h1>AI Component Search</h1>
-      <p>Find skills, agents, prompts, MCP servers, and models across AI marketplaces and GitHub.</p>
+      <p>Find skills, subagents, prompts, MCP servers, and models across AI marketplaces and GitHub.</p>
       <SearchForm loading={loading} onSearch={onSearch} />
 
       {error && <p className="status" style={{ color: '#b00' }}>{error}</p>}

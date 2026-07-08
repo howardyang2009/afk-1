@@ -1,12 +1,13 @@
 export type ComponentType =
   | 'skill'
-  | 'agent'
+  | 'subagent'
   | 'prompt'
   | 'mcp'
   | 'model'
   | 'claude-plugin'
   | 'hook'
-  | 'slash-command';
+  | 'slash-command'
+  | 'claude-md';
 export type AdapterId =
   | 'github'
   | 'smithery'

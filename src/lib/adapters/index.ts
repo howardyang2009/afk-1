@@ -22,8 +22,8 @@ export function createAdapters(config: AppConfig, fetchFn?: FetchLike): SearchAd
     }),
     createBraveAdapter({ fetchFn, apiKey: config.braveKey }),
     createHuggingfaceAdapter({ fetchFn, token: config.huggingfaceToken }),
-    createClaudePluginsDevAdapter({ fetchFn }),
-    createClaudePluginHubAdapter({ fetchFn }),
+    //createClaudePluginsDevAdapter({ fetchFn }),
+    //createClaudePluginHubAdapter({ fetchFn }),
   ];
 }
 

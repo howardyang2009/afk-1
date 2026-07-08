@@ -15,7 +15,7 @@ describe('createClaudePluginsDevAdapter', () => {
     expect(adapter.supports('claude-plugin')).toBe(true);
     expect(adapter.supports('skill')).toBe(true);
     expect(adapter.supports('mcp')).toBe(false);
-    expect(adapter.supports('agent')).toBe(false);
+    expect(adapter.supports('subagent')).toBe(false);
     expect(adapter.supports('prompt')).toBe(false);
     expect(adapter.supports('model')).toBe(false);
   });

@@ -14,7 +14,7 @@ describe('createBraveAdapter', () => {
   it('supports every component type', () => {
     const adapter = createBraveAdapter({ apiKey: 'k' });
     expect(adapter.supports('skill')).toBe(true);
-    expect(adapter.supports('agent')).toBe(true);
+    expect(adapter.supports('subagent')).toBe(true);
     expect(adapter.supports('prompt')).toBe(true);
     expect(adapter.supports('mcp')).toBe(true);
   });
