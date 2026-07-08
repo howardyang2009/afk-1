@@ -8,8 +8,10 @@ const TYPES: { value: ComponentType; label: string }[] = [
   { value: 'agent', label: 'Agent' },
   { value: 'prompt', label: 'Prompt' },
   { value: 'mcp', label: 'MCP server' },
-  { value: 'model', label: 'Model' },
+  { value: 'hook', label: 'Hook' },
+  { value: 'slash-command', label: 'Slash command' },
   { value: 'claude-plugin', label: 'Claude Plugin' },
+  { value: 'model', label: 'Model' },
 ];
 
 export function SearchForm({

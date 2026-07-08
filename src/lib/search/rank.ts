@@ -8,6 +8,7 @@ const SOURCE_WEIGHT: Record<AdapterId, number> = {
   brave: 1,
   huggingface: 3,
   'claude-plugins-dev': 3,
+  'claude-plugin-hub': 3,
 };
 
 function score(result: SearchResult): number {
