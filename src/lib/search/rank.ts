@@ -11,6 +11,7 @@ const SOURCE_WEIGHT: Record<AdapterId, number> = {
   'claude-plugin-hub': 3,
   'claude-skills-info': 3,
   'skills-sh': 3,
+  'skills-pawgrammer': 3,
 };
 
 function score(result: SearchResult): number {
