@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "ci": "npm run typecheck && npm run test"
+    "ci": "npm run typecheck && npm run test",
+    "sandcastle": "tsx .sandcastle/main.mts"
   },
   "devDependencies": {
     "@ai-hero/sandcastle": "^0.12.0",
