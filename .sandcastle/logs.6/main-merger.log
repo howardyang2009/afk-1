@@ -1,0 +1,49 @@
+
+--- Run started: 2026-07-10T17:22:43.202Z ---
+Sandcastle Run
+  Agent: merger
+  Sandbox: docker
+  Max iterations: 1
+  Branch: main
+Iteration 1/1
+Setting up sandbox
+  npm install
+Setting up sandbox done (1.7s)
+Agent started
+Bash(git branch -a && echo "---" && git log --oneline -5 sandcastle/issue-6 2>&1 && echo "---STATUS---" && git status)
+Bash(cat package.json 2>/dev/null | head -40)
+Bash(git merge sandcastle/issue-6 --no-edit 2>&1)
+Fast-forward merge, no conflicts. Now let me verify:
+Bash(npm run typecheck 2>&1 | tail -20)
+Bash(npm run test 2>&1 | tail -25)
+Both typecheck and tests pass. The merge was a fast-forward, so there's no merge commit yet. Let me create a summary commit and close the issue:
+Bash(git commit --allow-empty --no-edit -m "$(cat <<'EOF'
+Merge sandcastle/issue-6: clean afk-1 repo to minimal TypeScript scaffold
+
+Integrates issue #6 which removes the Next.js AI Component Search app
+(pages, API routes, adapters, search library) and replaces it with a
+minimal TypeScript scaffold (src/index.ts). Typecheck and tests pass.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+EOF
+)" 2>&1 && git log --oneline -3)
+Bash(gh issue close 6 --comment "Completed by Sandcastle" 2>&1)
+Done. Summary of what happened:
+
+**Merge — `sandcastle/issue-6`**
+- `git merge sandcastle/issue-6 --no-edit` → fast-forwarded cleanly, **no conflicts**. The branch cleans the old Next.js "AI Component Search" app (pages, API routes, all adapters, search library) down to a minimal TypeScript scaffold (`src/index.ts` + `src/index.test.ts`).
+- `npm run typecheck` → passed.
+- `npm run test` → passed (1 file, 1 test).
+- Created a summary commit (`7cca083`) on top to document the merge.
+
+**Issue closed**
+- Issue #6 closed with comment "Completed by Sandcastle".
+
+<promise>COMPLETE</promise>
+Agent stopped
+Capturing session
+Collecting commits
+Collecting commits done (0.0s)
+Agent signaled completion after 1 iteration(s).
+Run complete: agent finished after 1 iteration(s).
+Context window: 27k

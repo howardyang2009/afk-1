@@ -1,0 +1,111 @@
+
+--- Run started: 2026-07-10T17:14:07.374Z ---
+Iteration 1/100
+Setting up sandbox
+Setting up sandbox done (0.3s)
+Expanding shell expressions
+  git log -n 10 --format="%H%n%ad%n%B---" --date=short → ~229 tokens
+Expanding shell expressions done (0.1s)
+Agent started
+Bash(gh issue view 6)
+Bash(git branch --show-current && git log --oneline -3 && ls -la)
+Bash(cat README.md package.json && echo "=== SRC ===" && find src -type f | head -100)
+Bash(echo "=== .sandcastle ===" && ls -la .sandcastle && echo "=== .zenflow ===" && find .zenflow -type f && echo "=== docs ===" && find docs -type f && echo "=== .github ===" && find .github -type f && echo "=== gitignore ===" && cat .gitignore && echo "=== env ===" && cat .env.example)
+
+--- Run started: 2026-07-10T17:18:09.521Z ---
+Iteration 1/100
+Setting up sandbox
+Setting up sandbox done (0.3s)
+Expanding shell expressions
+  git log -n 10 --format="%H%n%ad%n%B---" --date=short → ~305 tokens
+Expanding shell expressions done (0.1s)
+Agent started
+Bash(gh issue view 6)
+Bash(git log --oneline -5 && git branch --show-current && git status)
+Bash(gh issue view 6 --json body,title,comments)
+Bash(ls -la /home/agent/workspace)
+Bash(find src -type f | head -100 && echo "---DOCS---" && find docs -type f)
+Bash(git ls-files | grep -iE '\.DS_Store|\.backup|\.zenflow' ; echo "---tracked junk check---"; git ls-files -- '*.DS_Store' ; echo "---all top level tracked---"; git ls-files | awk -F/ '{print $1}' | sort -u)
+Bash(echo "=== .zenflow ==="; find .zenflow -type f -exec ls -la {} \; ; echo "=== .DS_Store present? ==="; ls -la .DS_Store 2>/dev/null; find . -name '.DS_Store' -not -path './node_modules/*' 2>/dev/null; echo "=== .backup files ==="; find . -name '*.backup' -not -path './node_modules/*' 2>/dev/null; echo "=== init dep usage ==="; grep -rn "from 'init'\|require('init')\|from \"init\"" src .sandcastle 2>/dev/null | head; echo "done")
+Bash(gh issue list --state all --limit 20 2>/dev/null; echo "=== PRs ==="; gh pr list --state all --limit 10 2>/dev/null)
+Bash(cat .github/workflows/ci.yml)
+I now understand the context. This repo began as a TypeScript scaffold (issue 1), then became the "AI Component Search" Next.js app (issues 2-5). Issue 6 asks to **clean the repo back to a minimal scaffold** so the next project can start fresh. Everything is preserved in git history. Let me proceed.
+Bash(git rm -r -q src docs .zenflow next.config.mjs next-env.d.ts .env.example && rm -f .DS_Store && echo "removed app files"; git status --short | head -60)
+Now let me write the RED test first, then the scaffold files.
+Bash(npx vitest run 2>&1 | tail -20)
+RED confirmed. Now GREEN — the implementation:Now update the config files for a clean generic TypeScript scaffold:Now regenerate the lockfile and run the feedback loops:
+Bash(npm install 2>&1 | tail -15)
+Bash(npm run typecheck 2>&1 | tail -20 && echo "=== TEST ===" && npm run test 2>&1 | tail -20)
+Both pass. Let me verify the final state and that the sandcastle pipeline deps are intact:
+Bash(ls -la; echo "=== node_modules sandcastle/tsx present? ==="; ls -d node_modules/@ai-hero/sandcastle node_modules/tsx node_modules/vitest node_modules/typescript 2>&1; echo "=== git status ==="; git add -A && git status --short)
+The `.DS_Store` is gitignored so it won't be committed. Everything is staged correctly — the app is removed, sandcastle pipeline and CI intact, clean scaffold in place. Let me commit:
+Bash(rm -f .DS_Store; git commit -q -F - <<'EOF'
+RALPH: clean afk-1 repo to a minimal TypeScript scaffold (issue #6)
+
+Task: prepare the repo to start a new project (no parent PRD; issue body
+empty, intent taken from the title). Removed the "AI Component Search"
+Next.js app and leftover tooling artifacts; left a working TS scaffold.
+
+Key decisions:
+- Reset to a minimal scaffold rather than deleting everything so
+  typecheck/test still pass and CI stays green (mirrors original issue #1
+  "scaffold a basic TypeScript template"). Full prior app is preserved in
+  git history.
+- Kept .sandcastle pipeline, .github CI, git config untouched.
+- Dropped next/react/react-dom/zod + related devDeps; kept tsx/vitest/
+  typescript/@types/node/@ai-hero/sandcastle. Regenerated package-lock so
+  `npm ci` in CI stays consistent.
+- RGR: added src/index.ts + src/index.test.ts (RED then GREEN).
+
+Files: removed src/app, src/components, src/lib, docs/, .zenflow/,
+next.config.mjs, next-env.d.ts, .env.example, .DS_Store; added
+src/index.ts, src/index.test.ts; simplified package.json, tsconfig.json,
+vitest.config.ts, .gitignore, README.md.
+
+Notes for next iteration: replace src/index.ts with real code; add env
+vars/deps as the next project needs them.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+EOF
+git log --oneline -1)
+Bash(git status --short && echo "=== final CI check ===" && npm run ci 2>&1 | tail -12)
+Clean tree, `npm run ci` (typecheck + test) passes. Now let me leave a summary comment on the issue (not closing it):
+Bash(gh issue comment 6 --body "Cleaned the repo back to a minimal TypeScript scaffold on branch \`sandcastle/issue-6\` (commit 2dddc9f).
+
+**What was done**
+- Removed the previous *AI Component Search* Next.js app: \`src/app\`, \`src/components\`, \`src/lib\` (all adapters/search/config), plus \`docs/\`, \`.zenflow/\`, \`next.config.mjs\`, \`next-env.d.ts\`, \`.env.example\`, and a stray \`.DS_Store\`. All of it is preserved in git history.
+- Trimmed \`package.json\` deps to the essentials (\`typescript\`, \`tsx\`, \`vitest\`, \`@types/node\`, \`@ai-hero/sandcastle\`); dropped \`next\`/\`react\`/\`react-dom\`/\`zod\` and related devDeps. Regenerated \`package-lock.json\` so CI's \`npm ci\` stays consistent.
+- Simplified \`tsconfig.json\`, \`vitest.config.ts\`, \`.gitignore\`, and rewrote \`README.md\`.
+- Added a tiny working scaffold via RGR: \`src/index.ts\` + \`src/index.test.ts\`.
+- Left the \`.sandcastle\` pipeline and \`.github\` CI untouched.
+
+**Verification:** \`npm run typecheck\` and \`npm run test\` both pass (1 test).
+
+**Assumption:** the issue body was empty, so I interpreted the title ('prepare to start programming for next project') as a reset to a clean scaffold (mirroring the original issue #1) rather than a bare/empty repo, keeping CI green. Ready for the next project's code under \`src/\`.
+
+Leaving this open for review." 2>&1 | tail -3)
+Done. Summary of what I did for issue #6:
+
+**Task interpretation** — The issue body was empty, so I took the title ("clean this afk-1 repository to prepare start programming for next project") at face value: reset the repo from the existing *AI Component Search* Next.js app back to a clean, minimal TypeScript scaffold (mirroring the repo's original issue #1). Nothing was destroyed permanently — the full prior app remains in git history.
+
+**Changes (commit `2dddc9f` on `sandcastle/issue-6`)**
+- Removed the app: all of `src/app`, `src/components`, `src/lib`, plus `docs/`, `.zenflow/`, `next.config.mjs`, `next-env.d.ts`, `.env.example`, and a stray `.DS_Store`.
+- Trimmed dependencies to essentials (`typescript`, `tsx`, `vitest`, `@types/node`, `@ai-hero/sandcastle`); dropped `next`/`react`/`react-dom`/`zod` etc. Regenerated `package-lock.json` so CI's `npm ci` stays consistent.
+- Simplified `tsconfig.json`, `vitest.config.ts`, `.gitignore`; rewrote `README.md`.
+- Added a working scaffold via RGR (RED → GREEN): `src/index.ts` + `src/index.test.ts`.
+- Left the `.sandcastle` pipeline and `.github/workflows/ci.yml` untouched.
+
+**Feedback loops** — `npm run typecheck` ✅ and `npm run test` ✅ (1 test passing); working tree clean.
+
+Left a summary comment on the issue and did not close it, per instructions.
+
+<promise>COMPLETE</promise>
+Agent stopped
+Capturing session
+Syncing 1 commit to host
+Syncing 1 commit to host done (0.0s)
+Collecting commits
+Collecting commits done (0.0s)
+Agent signaled completion after 1 iteration(s).
+Run complete: agent finished after 1 iteration(s).
+Context window: 48k
